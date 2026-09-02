@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Hysen Hub Pro</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',Arial,sans-serif;min-height:100vh;color:#e2e8f0;background:radial-gradient(circle at top,#111936,#080b18);overflow-x:hidden}
+
+header{height:76px;background:rgba(8,11,22,0.85);border-bottom:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:space-between;padding:0 28px;position:sticky;top:0;z-index:100;backdrop-filter:blur(16px)}
+.logo{font-size:26px;font-weight:800;letter-spacing:-0.5px}.logo span{color:#766cff;text-shadow:0 0 15px rgba(118,108,255,0.5)}
+.admin-btn{background:linear-gradient(135deg,#756cff,#5148e8);color:white;border:0;border-radius:12px;padding:10px 20px;font-weight:bold;cursor:pointer;transition:all 0.3s ease;box-shadow:0 4px 15px rgba(117,108,255,0.3)}
+.admin-btn:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(117,108,255,0.5)}
+
+.container{max-width:1200px;margin:auto;padding:35px 20px}
+.hero{text-align:center;margin-bottom:30px}
+.hero h1{font-size:48px;font-weight:800;margin-bottom:10px;background:linear-gradient(to right,#fff,#9299b2);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hero p{color:#9299b2;font-size:18px}
+
+.search{width:min(650px,100%);padding:16px 22px;margin:24px auto;display:block;border-radius:16px;border:1px solid rgba(118,108,255,0.25);background:rgba(17,22,42,0.8);color:white;outline:0;font-size:16px;backdrop-filter:blur(10px);transition:all 0.3s}
+.search:focus{border-color:#756cff;box-shadow:0 0 20px rgba(117,108,255,0.25)}
+
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:20px}
+.card{position:relative;background:rgba(17,22,42,0.7);border:1px solid rgba(255,255,255,0.08);border-radius:20px;padding:24px;transition:all 0.3s ease;box-shadow:0 10px 30px rgba(0,0,0,0.3);backdrop-filter:blur(8px);display:flex;flex-direction:column;justify-content:space-between}
+.card:hover{transform:translateY(-7px);border-color:#756cff;box-shadow:0 15px 35px rgba(117,108,255,0.2)}
+.card-badge{position:absolute;top:15px;right:15px;font-size:10px;font-weight:bold;padding:4px 8px;border-radius:20px;background:rgba(117,108,255,0.15);color:#756cff;border:1px solid rgba(117,108,255,0.3);text-transform:uppercase}
+.fav-btn{position:absolute;top:12px;left:15px;background:none;border:none;font-size:18px;cursor:pointer;opacity:0.4;transition:0.2s}
+.fav-btn.active,.fav-btn:hover{opacity:1;transform:scale(1.2)}
+.icon{font-size:46px;margin:15px 0 10px 0;text-align:center}
+.card h3{font-size:20px;margin-bottom:6px;text-align:center}
+.card p{font-size:13.5px;color:#9299b2;margin-bottom:20px;text-align:center;line-height:1.4}
+.card button,.primary{width:100%;padding:12px;border:0;border-radius:12px;background:linear-gradient(135deg,#756cff,#5148e8);color:white;font-weight:bold;cursor:pointer;transition:all 0.2s;box-shadow:0 4px 12px rgba(117,108,255,0.2)}
+.card button:hover,.primary:hover{opacity:0.9;transform:scale(1.02)}
+
+#adminArea{display:none;animation:fadeIn 0.4s ease}
+.adminHeader{margin:35px 0 25px;padding:28px;border-radius:24px;background:linear-gradient(135deg,rgba(23,29,56,0.9),rgba(17,22,42,0.9));border:1px solid rgba(117,108,255,0.3);box-shadow:0 10px 40px rgba(0,0,0,0.5)}
+.status{display:inline-flex;align-items:center;gap:6px;color:#6cff9b;font-size:14px;margin-top:10px;background:rgba(108,255,155,0.1);padding:4px 12px;border-radius:20px;border:1px solid rgba(108,255,155,0.2)}
+.logout,.danger{background:#df4654!important;border:0;color:white;padding:10px 18px;border-radius:10px;font-weight:bold;cursor:pointer;transition:0.2s}
+.logout:hover,.danger:hover{background:#ff5263!important}
+.logout{margin-top:20px}
+
+.manager{margin-top:22px;padding:22px;border-radius:18px;background:rgba(11,16,34,0.8);border:1px solid rgba(255,255,255,0.08)}
+.manager h3{margin-bottom:12px;color:#756cff}
+.manager p{color:#9da4bf;font-size:14px;margin-bottom:16px}
+.managerGrid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+.manager input,.manager select,.modalBox input{width:100%;padding:13px 16px;border-radius:12px;border:1px solid #343c62;background:#090d1b;color:white;outline:0;font-size:14px;transition:0.2s}
+.manager input:focus,.modalBox input:focus{border-color:#756cff}
+.gameChecks{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;margin:14px 0}
+.gameChecks label{background:#11162a;border:1px solid rgba(255,255,255,0.08);padding:10px;border-radius:10px;font-size:13px;display:flex;align-items:center;gap:8px;cursor:pointer}
+.adminList{margin-top:15px;display:grid;gap:10px}
+.adminItem{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:14px 18px;border-radius:14px;background:#11162a;border:1px solid rgba(255,255,255,0.08)}
+.adminItem small{display:block;color:#9da4bf;margin-top:4px}
+
+.modal{position:fixed;inset:0;background:rgba(0,0,0,0.75);backdrop-filter:blur(8px);display:none;align-items:center;justify-content:center;z-index:200}
+.modalBox{width:min(420px,90%);background:#11162a;border:1px solid #343c62;border-radius:24px;padding:32px;box-shadow:0 25px 80px rgba(0,0,0,0.8)}
+.modalBox h2{margin-bottom:8px}
+.modalBox input{margin-bottom:14px}
+.modalBox button{width:100%;padding:13px;border:0;border-radius:12px;background:#756cff;color:white;font-weight:bold;cursor:pointer}
+.modalBox .close{margin-top:10px;background:#292e43}
+.error{color:#ff6969;margin-top:12px;font-size:14px;text-align:center}
+.credentials{margin-top:14px;padding:14px;border-radius:12px;background:rgba(117,108,255,0.1);border:1px solid rgba(117,108,255,0.3);line-height:1.7}
+.hidden{display:none!important}
+
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+@media(max-width:650px){.managerGrid{grid-template-columns:1fr}.adminItem{align-items:flex-start;flex-direction:column}.hero h1{font-size:34px}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">🚀 Hysen<span>Hub</span></div>
+  <button class="admin-btn" onclick="openLogin()">🔐 Admin Login</button>
+</header>
+
+<div class="container">
+  <section class="hero">
+    <h1>Willkommen bei Hysen Hub</h1>
+    <p>Deine zentralen Apps und Spiele an einem Ort.</p>
+    <input id="appSearch" class="search" placeholder="🔎 Apps oder Spiele suchen..." oninput="searchApps()">
+  </section>
+
+  <h2 style="margin-bottom:15px; font-size:22px;">📱 Hub Apps</h2>
+  <div class="grid" id="apps">
+    <div class="card" data-id="studyflix">
+      <button class="fav-btn" onclick="toggleFav(this)">⭐</button>
+      <span class="card-badge">Lernen</span>
+      <div class="icon">🎓</div>
+      <h3>Studyflix</h3>
+      <p>Erklärvideos & Lerninhalte einfach erklärt</p>
+      <button onclick="openSite('https://studyflix.de')">Öffnen</button>
+    </div>
+    <div class="card" data-id="youtube">
+      <button class="fav-btn" onclick="toggleFav(this)">⭐</button>
+      <span class="card-badge">Medien</span>
+      <div class="icon">▶️</div>
+      <h3>YouTube</h3>
+      <p>Videos, Tutorials und Shorts</p>
+      <button onclick="openSite('https://www.youtube.com')">Öffnen</button>
+    </div>
+    <div class="card" data-id="m365">
+      <button class="fav-btn" onclick="toggleFav(this)">⭐</button>
+      <span class="card-badge">Arbeit</span>
+      <div class="icon">💼</div>
+      <h3>Microsoft 365</h3>
+      <p>Word, Excel und PowerPoint</p>
+      <button onclick="openSite('https://www.microsoft365.com')">Öffnen</button>
+    </div>
+    <div class="card" data-id="chatgpt">
+      <button class="fav-btn" onclick="toggleFav(this)">⭐</button>
+      <span class="card-badge">KI</span>
+      <div class="icon">🤖</div>
+      <h3>ChatGPT</h3>
+      <p>Intelligenter KI-Assistent</p>
+      <button onclick="openSite('https://chatgpt.com')">Öffnen</button>
+    </div>
+    <div class="card" data-id="google">
+      <button class="fav-btn" onclick="toggleFav(this)">⭐</button>
+      <span class="card-badge">Suche</span>
+      <div class="icon">🌐</div>
+      <h3>Google</h3>
+      <p>Schnelle Web-Suche</p>
+      <button onclick="openSite('https://www.google.com')">Öffnen</button>
+    </div>
+    <div class="card" data-id="schulportal">
+      <button class="fav-btn" onclick="toggleFav(this)">⭐</button>
+      <span class="card-badge">Schule</span>
+      <div class="icon">🏫</div>
+      <h3>Schulportal Hessen</h3>
+      <p>Schulportal und Vertretungsplan</p>
+      <button onclick="openSite('https://login.schulportal.hessen.de/?i=6092#')">Öffnen</button>
+    </div>
+  </div>
+
+  <section id="adminArea">
+    <div class="adminHeader">
+      <h2 id="adminTitle">🎮 Game Center</h2>
+      <p id="adminDescription"></p>
+      <div class="status">● Angemeldet</div>
+
+      <!-- APP / GAME CREATOR -->
+      <div id="creator" class="manager hidden">
+        <h3>➕ Neue Karte hinzufügen</h3>
+        <p>Erstelle ein neues Spiel oder eine neue App für das Dashboard.</p>
+        <div class="managerGrid">
+          <input id="newTitle" placeholder="Titel (z. B. Roblox)">
+          <input id="newCategory" placeholder="Kategorie (z. B. Gaming)">
+        </div>
+        <div class="managerGrid">
+          <input id="newIcon" placeholder="Emoji Icon (z. B. 🎮)">
+          <input id="newUrl" placeholder="URL (https://...)">
+        </div>
+        <input id="newDesc" placeholder="Kurze Beschreibung" style="margin-bottom:12px;">
+        <button class="primary" onclick="addCustomCard()">Card erstellen</button>
+      </div>
+
+      <!-- FRIEND ADMIN MANAGER -->
+      <div id="manager" class="manager hidden">
+        <h3>👥 Freund-Admins verwalten</h3>
+        <p>Generiere Erlaubnis-Codes für Freunde.</p>
+        <div class="managerGrid">
+          <input id="friendName" placeholder="Name des Freundes">
+          <select id="friendAccess" onchange="toggleGameChecks()">
+            <option value="selected">Ausgewählte Spiele</option>
+            <option value="all">Alle Spiele</option>
+          </select>
+        </div>
+        <div class="gameChecks" id="gameChecks">
+          <label><input type="checkbox" value="crazygames"> 🎮 CrazyGames</label>
+          <label><input type="checkbox" value="subway"> 🚇 Subway Surfers</label>
+          <label><input type="checkbox" value="roblox"> 🧱 Roblox</label>
+          <label><input type="checkbox" value="chess"> ♟️ Chess.com</label>
+          <label><input type="checkbox" value="2048"> 🔢 2048</label>
+          <label><input type="checkbox" value="solitaire"> 🃏 Solitaire</label>
+          <label><input type="checkbox" value="pacman"> 🟡 Pac-Man</label>
+          <label><input type="checkbox" value="alchemy"> 🧩 Little Alchemy</label>
+        </div>
+        <button class="primary" onclick="createFriendAdmin()">🔑 Zugang erstellen</button>
+        <div id="createdCredentials"></div>
+        <div id="friendAdmins" class="adminList"></div>
+      </div>
+
+      <button class="logout" onclick="logout()">Abmelden</button>
+    </div>
+
+    <input id="gameSearch" class="search" placeholder="🔎 Spiele suchen..." oninput="searchGames()">
+    
+    <div class="grid" id="games">
+      <div class="card" data-game="crazygames"><span class="card-badge">Gaming</span><div class="icon">🎮</div><h3>CrazyGames</h3><p>Viele Browsergames</p><button onclick="openSite('https://www.crazygames.com')">Spielen</button></div>
+      <div class="card" data-game="subway"><span class="card-badge">Gaming</span><div class="icon">🚇</div><h3>Subway Surfers</h3><p>Runner Game im Browser</p><button onclick="openSite('https://ss.randomkzn.com')">Spielen</button></div>
+      <div class="card" data-game="roblox"><span class="card-badge">Gaming</span><div class="icon">🧱</div><h3>Roblox</h3><p>Roblox Web Platform</p><button onclick="openSite('https://www.roblox.com')">Spielen</button></div>
+      <div class="card" data-game="chess"><span class="card-badge">Strategie</span><div class="icon">♟️</div><h3>Chess.com</h3><p>Online Schach spielen</p><button onclick="openSite('https://www.chess.com')">Spielen</button></div>
+      <div class="card" data-game="2048"><span class="card-badge">Puzzle</span><div class="icon">🔢</div><h3>2048</h3><p>Klassisches Zahlenspiel</p><button onclick="openSite('https://play2048.co')">Spielen</button></div>
+      <div class="card" data-game="solitaire"><span class="card-badge">Karten</span><div class="icon">🃏</div><h3>Solitaire</h3><p>Kartenklassiker</p><button onclick="openSite('https://www.solitr.com')">Spielen</button></div>
+      <div class="card" data-game="pacman"><span class="card-badge">Arcade</span><div class="icon">🟡</div><h3>Pac-Man</h3><p>Arcade Nostalgie</p><button onclick="openSite('https://www.google.com/search?q=play+pacman')">Spielen</button></div>
+      <div class="card" data-game="alchemy"><span class="card-badge">Puzzle</span><div class="icon">🧩</div><h3>Little Alchemy</h3><p>Elemente kombinieren</p><button onclick="openSite('https://littlealchemy2.com')">Spielen</button></div>
+    </div>
+  </section>
+</div>
+
+<!-- LOGIN MODAL -->
+<div class="modal" id="loginModal">
+  <div class="modalBox">
+    <h2>🔐 Admin Login</h2>
+    <p class="hint" style="margin-bottom:14px; font-size:13px; color:#9299b2">
+      Haupt-Admin Code: <b>MAIN</b> | Passwort: <b>ADMIN123</b>
+    </p>
+    <input id="loginCode" placeholder="Erlaubnis-Code (z. B. MAIN)">
+    <input id="loginPassword" type="password" placeholder="Passwort" onkeydown="if(event.key==='Enter')login()">
+    <button onclick="login()">Einloggen</button>
+    <button class="close" onclick="closeLogin()">Abbrechen</button>
+    <p id="error" class="error"></p>
+  </div>
+</div>
+
+<script>
+let currentUser = null;
+let friendAdmins = JSON.parse(localStorage.getItem('hysen_friends') || '[]');
+const games = [...document.querySelectorAll("#games .card")];
+
+function openSite(url){ window.open(url, "_blank", "noopener,noreferrer"); }
+function openLogin(){ document.getElementById("loginModal").style.display="flex"; document.getElementById("loginCode").focus(); }
+function closeLogin(){ document.getElementById("loginModal").style.display="none"; document.getElementById("loginCode").value=""; document.getElementById("loginPassword").value=""; document.getElementById("error").textContent=""; }
+
+function login(){
+  const code = document.getElementById("loginCode").value.trim();
+  const pass = document.getElementById("loginPassword").value;
+  const err = document.getElementById("error");
+
+  // Haupt-Admin Validierung mit Passwort ADMIN123
+  if(code === "MAIN" && pass === "ADMIN123"){
+    currentUser = { role: "main", name: "Haupt-Admin", games: ["all"] };
+    closeLogin();
+    showAdmin();
+    return;
+  }
+
+  // Freund-Admin Validierung
+  const friend = friendAdmins.find(f => f.code === code && f.password === pass);
+  if(friend){
+    currentUser = { role: "friend", name: friend.name, games: friend.games };
+    closeLogin();
+    showAdmin();
+    return;
+  }
+
+  err.textContent = "❌ Ungültiger Code oder falsches Passwort!";
+}
+
+function showAdmin(){
+  document.getElementById("adminArea").style.display = "block";
+  document.getElementById("adminTitle").textContent = currentUser.role === "main" ? "🎮 Haupt-Admin Game Center" : "🎮 " + currentUser.name + " – Game Center";
+  document.getElementById("adminDescription").textContent = currentUser.role === "main" ? "Du hast volle Kontrolle über Spiele und Systemrechte." : "Du hast Zugriff auf deine freigegebenen Spiele.";
+  
+  document.getElementById("manager").classList.toggle("hidden", currentUser.role !== "main");
+  document.getElementById("creator").classList.toggle("hidden", currentUser.role !== "main");
+  
+  applyPermissions();
+  if(currentUser.role === "main") renderFriendAdmins();
+  document.getElementById("adminArea").scrollIntoView({ behavior: "smooth" });
+}
+
+function applyPermissions(){
+  const allGameCards = document.querySelectorAll("#games .card");
+  allGameCards.forEach(c => {
+    const gameKey = c.dataset.game;
+    const isAllowed = currentUser.role === "main" || currentUser.games.includes("all") || currentUser.games.includes(gameKey);
+    c.style.display = isAllowed ? "" : "none";
+  });
+}
+
+function createFriendAdmin(){
+  const name = document.getElementById("friendName").value.trim();
+  const isAll = document.getElementById("friendAccess").value === "all";
+  const selectedGames = [...document.querySelectorAll("#gameChecks input:checked")].map(x => x.value);
+
+  if(!name){ alert("Bitte einen Namen eingeben!"); return; }
+
+  const newCode = "HUB-" + Math.floor(1000 + Math.random() * 9000);
+  const newPass = Math.random().toString(36).slice(-6);
+
+  const newFriend = {
+    id: Date.now().toString(),
+    name: name,
+    code: newCode,
+    password: newPass,
+    games: isAll ? ["all"] : selectedGames
+  };
+
+  friendAdmins.push(newFriend);
+  localStorage.setItem('hysen_friends', JSON.stringify(friendAdmins));
+
+  document.getElementById("createdCredentials").innerHTML = `
+    <div class="credentials">
+      ✅ <b>${escapeHtml(name)}</b> erstellt!<br>
+      🎟️ Erlaubnis-Code: <b>${newCode}</b><br>
+      🔑 Passwort: <b>${newPass}</b>
+    </div>`;
+
+  document.getElementById("friendName").value = "";
+  renderFriendAdmins();
+}
+
+function renderFriendAdmins(){
+  const box = document.getElementById("friendAdmins");
+  box.innerHTML = friendAdmins.length ? friendAdmins.map(a => `
+    <div class="adminItem">
+      <div>
+        <b>👤 ${escapeHtml(a.name)}</b> 
+        <small>Code: ${a.code} | 🎮 ${a.games.includes("all") ? "Alle Spiele" : a.games.length + " Spiele"}</small>
+      </div>
+      <button class="danger" onclick="deleteAdmin('${a.id}')">🗑️ Löschen</button>
+    </div>
+  `).join("") : "<small class='hint' style='color:#9299b2'>Noch keine Freund-Admins registriert.</small>";
+}
+
+function deleteAdmin(id){
+  friendAdmins = friendAdmins.filter(f => f.id !== id);
+  localStorage.setItem('hysen_friends', JSON.stringify(friendAdmins));
+  renderFriendAdmins();
+}
+
+function addCustomCard(){
+  const title = document.getElementById("newTitle").value.trim();
+  const category = document.getElementById("newCategory").value.trim() || "App";
+  const icon = document.getElementById("newIcon").value.trim() || "🚀";
+  const url = document.getElementById("newUrl").value.trim();
+  const desc = document.getElementById("newDesc").value.trim() || "Eigene benutzerdefinierte Verknüpfung";
+
+  if(!title || !url){ alert("Bitte mindestens Titel und URL angeben!"); return; }
+
+  const cardHtml = `
+    <div class="card" data-id="${Date.now()}">
+      <button class="fav-btn" onclick="toggleFav(this)">⭐</button>
+      <span class="card-badge">${escapeHtml(category)}</span>
+      <div class="icon">${icon}</div>
+      <h3>${escapeHtml(title)}</h3>
+      <p>${escapeHtml(desc)}</p>
+      <button onclick="openSite('${url}')">Öffnen</button>
+    </div>`;
+
+  document.getElementById("apps").insertAdjacentHTML('beforeend', cardHtml);
+  document.getElementById("newTitle").value = "";
+  document.getElementById("newUrl").value = "";
+  document.getElementById("newDesc").value = "";
+  alert("Card erfolgreich hinzugefügt!");
+}
+
+function toggleFav(btn){
+  btn.classList.toggle("active");
+  const card = btn.closest(".card");
+  if(btn.classList.contains("active")){
+    card.parentNode.prepend(card);
+  }
+}
+
+function logout(){
+  currentUser = null;
+  document.getElementById("adminArea").style.display = "none";
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function toggleGameChecks(){
+  const isAll = document.getElementById("friendAccess").value === "all";
+  document.querySelectorAll("#gameChecks input").forEach(x => {
+    x.disabled = isAll;
+    if(isAll) x.checked = false;
+  });
+}
+
+function searchApps(){
+  const q = document.getElementById("appSearch").value.toLowerCase();
+  document.querySelectorAll("#apps .card").forEach(c => c.style.display = c.innerText.toLowerCase().includes(q) ? "" : "none");
+}
+
+function searchGames(){
+  const q = document.getElementById("gameSearch").value.toLowerCase();
+  document.querySelectorAll("#games .card").forEach(c => {
+    const isAllowed = currentUser && (currentUser.role === "main" || currentUser.games.includes("all") || currentUser.games.includes(c.dataset.game));
+    c.style.display = isAllowed && c.innerText.toLowerCase().includes(q) ? "" : "none";
+  });
+}
+
+function escapeHtml(v){ return String(v).replace(/[&<>"']/g, m => ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;" }[m])); }
+
+toggleGameChecks();
+</script>
+</body>
+</html>
