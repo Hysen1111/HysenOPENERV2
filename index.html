@@ -59,7 +59,7 @@ header{height:76px;background:rgba(8,11,22,0.85);border-bottom:1px solid rgba(25
 .modalBox button{width:100%;padding:13px;border:0;border-radius:12px;background:#756cff;color:white;font-weight:bold;cursor:pointer}
 .modalBox .close{margin-top:10px;background:#292e43}
 .error{color:#ff6969;margin-top:12px;font-size:14px;text-align:center}
-.credentials{margin-top:14px;padding:14px;border-radius:12px;background:rgba(117,108,255,0.1);border:1px solid rgba(117,108,255,0.3);line-height:1.7}
+.credentials{margin-top:14px;padding:14px;border-radius:12px;background:rgba(117,108,255,0.15);border:1px solid rgba(117,108,255,0.4);line-height:1.7;color:#fff}
 .hidden{display:none!important}
 
 @keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
@@ -151,15 +151,18 @@ header{height:76px;background:rgba(8,11,22,0.85);border-bottom:1px solid rgba(25
           <input id="newUrl" placeholder="URL (https://...)">
         </div>
         <input id="newDesc" placeholder="Kurze Beschreibung" style="margin-bottom:12px;">
-        <button class="primary" onclick="addCustomCard()">Card erstellen</button>
+        <button class="primary" type="button" onclick="addCustomCard()">Card erstellen</button>
       </div>
 
       <!-- FRIEND ADMIN MANAGER -->
       <div id="manager" class="manager hidden">
-        <h3>👥 Freund-Admins verwalten</h3>
-        <p>Generiere Erlaubnis-Codes für Freunde.</p>
+        <h3>👥 Freund-Zugang erstellen</h3>
+        <p>Erstelle hier einen Erlaubnis-Code und ein Passwort für deine Freunde (z.B. Vedat oder Eslem).</p>
         <div class="managerGrid">
-          <input id="friendName" placeholder="Name des Freundes">
+          <input id="friendName" placeholder="Name des Freundes (z.B. Vedat)">
+          <input id="friendCustomPass" placeholder="Wunsch-Passwort (z.B. vedat123)">
+        </div>
+        <div class="managerGrid">
           <select id="friendAccess" onchange="toggleGameChecks()">
             <option value="selected">Ausgewählte Spiele</option>
             <option value="all">Alle Spiele</option>
@@ -175,12 +178,12 @@ header{height:76px;background:rgba(8,11,22,0.85);border-bottom:1px solid rgba(25
           <label><input type="checkbox" value="pacman"> 🟡 Pac-Man</label>
           <label><input type="checkbox" value="alchemy"> 🧩 Little Alchemy</label>
         </div>
-        <button class="primary" onclick="createFriendAdmin()">🔑 Zugang erstellen</button>
+        <button class="primary" type="button" onclick="createFriendAdmin()">🔑 Zugang erstellen</button>
         <div id="createdCredentials"></div>
         <div id="friendAdmins" class="adminList"></div>
       </div>
 
-      <button class="logout" onclick="logout()">Abmelden</button>
+      <button class="logout" type="button" onclick="logout()">Abmelden</button>
     </div>
 
     <input id="gameSearch" class="search" placeholder="🔎 Spiele suchen..." oninput="searchGames()">
@@ -203,12 +206,12 @@ header{height:76px;background:rgba(8,11,22,0.85);border-bottom:1px solid rgba(25
   <div class="modalBox">
     <h2>🔐 Admin Login</h2>
     <p class="hint" style="margin-bottom:14px; font-size:13px; color:#9299b2">
-      Haupt-Admin Code: <b>MAIN</b> | Passwort: <b>ADMIN123</b>
+      Gib deinen Erlaubnis-Code und dein Passwort ein.
     </p>
     <input id="loginCode" placeholder="Erlaubnis-Code (z. B. MAIN)">
     <input id="loginPassword" type="password" placeholder="Passwort" onkeydown="if(event.key==='Enter')login()">
-    <button onclick="login()">Einloggen</button>
-    <button class="close" onclick="closeLogin()">Abbrechen</button>
+    <button type="button" onclick="login()">Einloggen</button>
+    <button type="button" class="close" onclick="closeLogin()">Abbrechen</button>
     <p id="error" class="error"></p>
   </div>
 </div>
@@ -216,27 +219,27 @@ header{height:76px;background:rgba(8,11,22,0.85);border-bottom:1px solid rgba(25
 <script>
 let currentUser = null;
 let friendAdmins = JSON.parse(localStorage.getItem('hysen_friends') || '[]');
-const games = [...document.querySelectorAll("#games .card")];
+
+const validMainPasswords = ["hysen", "vedat", "eslem"];
 
 function openSite(url){ window.open(url, "_blank", "noopener,noreferrer"); }
 function openLogin(){ document.getElementById("loginModal").style.display="flex"; document.getElementById("loginCode").focus(); }
 function closeLogin(){ document.getElementById("loginModal").style.display="none"; document.getElementById("loginCode").value=""; document.getElementById("loginPassword").value=""; document.getElementById("error").textContent=""; }
 
 function login(){
-  const code = document.getElementById("loginCode").value.trim();
-  const pass = document.getElementById("loginPassword").value;
+  const code = document.getElementById("loginCode").value.trim().toUpperCase();
+  const pass = document.getElementById("loginPassword").value.trim().toLowerCase();
   const err = document.getElementById("error");
 
-  // Haupt-Admin Validierung mit Passwort ADMIN123
-  if(code === "MAIN" && pass === "ADMIN123"){
-    currentUser = { role: "main", name: "Haupt-Admin", games: ["all"] };
+  if(code === "MAIN" && validMainPasswords.includes(pass)){
+    const adminName = pass.charAt(0).toUpperCase() + pass.slice(1);
+    currentUser = { role: "main", name: adminName, games: ["all"] };
     closeLogin();
     showAdmin();
     return;
   }
 
-  // Freund-Admin Validierung
-  const friend = friendAdmins.find(f => f.code === code && f.password === pass);
+  const friend = friendAdmins.find(f => f.code.toUpperCase() === code && f.password.toLowerCase() === pass);
   if(friend){
     currentUser = { role: "friend", name: friend.name, games: friend.games };
     closeLogin();
@@ -249,7 +252,7 @@ function login(){
 
 function showAdmin(){
   document.getElementById("adminArea").style.display = "block";
-  document.getElementById("adminTitle").textContent = currentUser.role === "main" ? "🎮 Haupt-Admin Game Center" : "🎮 " + currentUser.name + " – Game Center";
+  document.getElementById("adminTitle").textContent = currentUser.role === "main" ? "🎮 Haupt-Admin Game Center (" + currentUser.name + ")" : "🎮 " + currentUser.name + " – Game Center";
   document.getElementById("adminDescription").textContent = currentUser.role === "main" ? "Du hast volle Kontrolle über Spiele und Systemrechte." : "Du hast Zugriff auf deine freigegebenen Spiele.";
   
   document.getElementById("manager").classList.toggle("hidden", currentUser.role !== "main");
@@ -271,13 +274,17 @@ function applyPermissions(){
 
 function createFriendAdmin(){
   const name = document.getElementById("friendName").value.trim();
+  const customPass = document.getElementById("friendCustomPass").value.trim();
   const isAll = document.getElementById("friendAccess").value === "all";
   const selectedGames = [...document.querySelectorAll("#gameChecks input:checked")].map(x => x.value);
 
-  if(!name){ alert("Bitte einen Namen eingeben!"); return; }
+  if(!name){
+    alert("Bitte gib einen Namen für deinen Freund ein!");
+    return;
+  }
 
   const newCode = "HUB-" + Math.floor(1000 + Math.random() * 9000);
-  const newPass = Math.random().toString(36).slice(-6);
+  const newPass = customPass || Math.random().toString(36).slice(-6);
 
   const newFriend = {
     id: Date.now().toString(),
@@ -292,26 +299,32 @@ function createFriendAdmin(){
 
   document.getElementById("createdCredentials").innerHTML = `
     <div class="credentials">
-      ✅ <b>${escapeHtml(name)}</b> erstellt!<br>
+      ✅ Zugangsdaten für <b>${escapeHtml(name)}</b> wurden erstellt!<br>
       🎟️ Erlaubnis-Code: <b>${newCode}</b><br>
       🔑 Passwort: <b>${newPass}</b>
     </div>`;
 
   document.getElementById("friendName").value = "";
+  document.getElementById("friendCustomPass").value = "";
   renderFriendAdmins();
 }
 
 function renderFriendAdmins(){
   const box = document.getElementById("friendAdmins");
-  box.innerHTML = friendAdmins.length ? friendAdmins.map(a => `
+  if(!friendAdmins || friendAdmins.length === 0){
+    box.innerHTML = "<small class='hint' style='color:#9da4bf;'>Noch keine Freund-Admins registriert.</small>";
+    return;
+  }
+
+  box.innerHTML = friendAdmins.map(a => `
     <div class="adminItem">
       <div>
         <b>👤 ${escapeHtml(a.name)}</b> 
-        <small>Code: ${a.code} | 🎮 ${a.games.includes("all") ? "Alle Spiele" : a.games.length + " Spiele"}</small>
+        <small>Code: <b>${a.code}</b> | PW: <b>${escapeHtml(a.password)}</b> | 🎮 ${a.games.includes("all") ? "Alle Spiele" : a.games.length + " Spiele"}</small>
       </div>
-      <button class="danger" onclick="deleteAdmin('${a.id}')">🗑️ Löschen</button>
+      <button class="danger" type="button" onclick="deleteAdmin('${a.id}')">🗑️ Löschen</button>
     </div>
-  `).join("") : "<small class='hint' style='color:#9299b2'>Noch keine Freund-Admins registriert.</small>";
+  `).join("");
 }
 
 function deleteAdmin(id){
