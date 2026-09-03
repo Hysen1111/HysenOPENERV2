@@ -6,12 +6,12 @@
 <title>Hysen Hub Pro</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Segoe UI',Arial,sans-serif;min-height:100vh;color:#e2e8f0;background:radial-gradient(circle at top,#111936,#080b18);overflow-x:hidden}
+body{font-family:'Segoe UI',Arial,sans-serif;min-height:100vh;color:#e2e8f0;background:radial-gradient(circle at top,#111936,#080b18);overflow-x:hidden;transition:background 0.5s ease}
 
 header{height:76px;background:rgba(8,11,22,0.85);border-bottom:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:space-between;padding:0 28px;position:sticky;top:0;z-index:100;backdrop-filter:blur(16px)}
 .logo{font-size:26px;font-weight:800;letter-spacing:-0.5px}.logo span{color:#766cff;text-shadow:0 0 15px rgba(118,108,255,0.5)}
 .header-right{display:flex;align-items:center;gap:15px}
-.live-clock{font-size:16px;font-weight:bold;background:rgba(117,108,255,0.15);padding:8px 14px;border-radius:12px;border:1px solid rgba(117,108,255,0.3);color:#e2e8f0}
+.live-clock{font-size:15px;font-weight:bold;background:rgba(117,108,255,0.15);padding:8px 14px;border-radius:12px;border:1px solid rgba(117,108,255,0.3);color:#e2e8f0}
 .admin-btn{background:linear-gradient(135deg,#756cff,#5148e8);color:white;border:0;border-radius:12px;padding:10px 20px;font-weight:bold;cursor:pointer;transition:all 0.3s ease;box-shadow:0 4px 15px rgba(117,108,255,0.3)}
 .admin-btn:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(117,108,255,0.5)}
 
@@ -61,6 +61,11 @@ body.is-admin .delete-btn{display:block}
 .manager input,.manager select,.modalBox input{width:100%;padding:13px 16px;border-radius:12px;border:1px solid #343c62;background:#090d1b;color:white;outline:0;font-size:14px;transition:0.2s}
 .manager input:focus,.modalBox input:focus{border-color:#756cff}
 
+/* FARB AUSWAHL IM ADMIN AREA */
+.theme-picker{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+.theme-btn{width:36px;height:36px;border-radius:50%;border:2px solid rgba(255,255,255,0.4);cursor:pointer;transition:transform 0.2s}
+.theme-btn:hover{transform:scale(1.2)}
+
 .modal{position:fixed;inset:0;background:rgba(0,0,0,0.75);backdrop-filter:blur(8px);display:none;align-items:center;justify-content:center;z-index:200}
 .modalBox{width:min(420px,90%);background:#11162a;border:1px solid #343c62;border-radius:24px;padding:32px;box-shadow:0 25px 80px rgba(0,0,0,0.8)}
 .modalBox h2{margin-bottom:8px}
@@ -78,7 +83,7 @@ body.is-admin .delete-btn{display:block}
 <header>
   <div class="logo">🚀 Hysen<span>Hub</span></div>
   <div class="header-right">
-    <div class="live-clock" id="clock">⏱️ --:--:--</div>
+    <div class="live-clock" id="clock">📅 --.--.---- | ⏱️ --:--:--</div>
     <button class="admin-btn" onclick="openLogin()">🔐 Admin Login</button>
   </div>
 </header>
@@ -152,26 +157,10 @@ body.is-admin .delete-btn{display:block}
     <div class="card">
       <button class="fav-btn" onclick="toggleFav(this)">⭐</button>
       <span class="card-badge">Lernen</span>
-      <div class="icon">🟡</div>
-      <h3>Anton App</h3>
-      <p>Kostenlose Lern-App für die Schule</p>
-      <button onclick="openSite('https://anton.app')">Öffnen</button>
-    </div>
-    <div class="card">
-      <button class="fav-btn" onclick="toggleFav(this)">⭐</button>
-      <span class="card-badge">Lernen</span>
       <div class="icon">🎓</div>
       <h3>Studyflix</h3>
       <p>Erklärvideos & Lerninhalte einfach erklärt</p>
       <button onclick="openSite('https://studyflix.de')">Öffnen</button>
-    </div>
-    <div class="card">
-      <button class="fav-btn" onclick="toggleFav(this)">⭐</button>
-      <span class="card-badge">Medien</span>
-      <div class="icon">▶️</div>
-      <h3>YouTube</h3>
-      <p>Videos, Tutorials und Shorts</p>
-      <button onclick="openSite('https://www.youtube.com')">Öffnen</button>
     </div>
     <div class="card">
       <button class="fav-btn" onclick="toggleFav(this)">⭐</button>
@@ -210,8 +199,22 @@ body.is-admin .delete-btn{display:block}
   <section id="adminArea">
     <div class="adminHeader">
       <h2>🎮 Game Center & Link-Creator</h2>
-      <p>Hier kannst du neue Links erstellen und auf alle Admin-Inhalte zugreifen.</p>
+      <p>Hier kannst du neue Links erstellen, den Hintergrund ändern und auf alle Admin-Inhalte zugreifen.</p>
       <div class="status">● Als Admin angemeldet</div>
+
+      <!-- HINTERGRUND FARB-EINSTELLUNG -->
+      <div class="manager">
+        <h3>🎨 Hintergrund-Design ändern</h3>
+        <p>Wähle eine Farbe oder ein Design für den Hintergrund aus:</p>
+        <div class="theme-picker">
+          <button class="theme-btn" style="background: radial-gradient(circle, #111936, #080b18);" onclick="changeBg('radial-gradient(circle at top, #111936, #080b18)')" title="Dark Cyber"></button>
+          <button class="theme-btn" style="background: radial-gradient(circle, #2b1055, #0a051b);" onclick="changeBg('radial-gradient(circle at top, #2b1055, #0a051b)')" title="Neon Purple"></button>
+          <button class="theme-btn" style="background: radial-gradient(circle, #06382c, #021410);" onclick="changeBg('radial-gradient(circle at top, #06382c, #021410)')" title="Emerald Green"></button>
+          <button class="theme-btn" style="background: radial-gradient(circle, #4a1d13, #170805);" onclick="changeBg('radial-gradient(circle at top, #4a1d13, #170805)')" title="Sunset Orange"></button>
+          <button class="theme-btn" style="background: radial-gradient(circle, #3d081b, #120208);" onclick="changeBg('radial-gradient(circle at top, #3d081b, #120208)')" title="Crimson Dark"></button>
+          <button class="theme-btn" style="background: radial-gradient(circle, #0d2847, #030c17);" onclick="changeBg('radial-gradient(circle at top, #0d2847, #030c17)')" title="Deep Ocean"></button>
+        </div>
+      </div>
 
       <!-- LINK / CARD CREATOR -->
       <div class="manager">
@@ -241,6 +244,9 @@ body.is-admin .delete-btn{display:block}
     <input id="gameSearch" class="search" placeholder="🔎 Spiele & Admin-Links suchen..." oninput="searchGames()">
     
     <div class="grid" id="games">
+      <div class="card"><span class="card-badge">Gaming</span><div class="icon">⏱️</div><h3>Wiki Speedrun</h3><p>Finde den schnellsten Weg von Artikel A zu Artikel B</p><button onclick="openSite('https://wikispeedrun.com')">Spielen</button></div>
+      <div class="card"><span class="card-badge">Medien</span><div class="icon">▶️</div><h3>YouTube</h3><p>Videos, Tutorials und Shorts</p><button onclick="openSite('https://www.youtube.com')">Öffnen</button></div>
+      <div class="card"><span class="card-badge">Lernen</span><div class="icon">🟡</div><h3>Anton App</h3><p>Kostenlose Lern-App für die Schule</p><button onclick="openSite('https://anton.app')">Öffnen</button></div>
       <div class="card"><span class="card-badge">Social</span><div class="icon">🎵</div><h3>TikTok</h3><p>Videos und Trends ansehen</p><button onclick="openSite('https://www.tiktok.com')">Öffnen</button></div>
       <div class="card"><span class="card-badge">Store</span><div class="icon">🛍️</div><h3>Chrome Web Store</h3><p>Erweiterungen & Themes finden</p><button onclick="openSite('https://chromewebstore.google.com')">Öffnen</button></div>
       <div class="card"><span class="card-badge">Kino</span><div class="icon">🍿</div><h3>Kinopolis</h3><p>Filme & Kinoprogramm ansehen</p><button onclick="openSite('https://www.kinopolis.de')">Öffnen</button></div>
@@ -271,13 +277,16 @@ body.is-admin .delete-btn{display:block}
 <script>
 const validPasswords = ["hysen", "vedat", "eslem", "tajus", "melvin"];
 
-// LIVE UHRZEIT
+// LIVE UHRZEIT UND DATUM
 function updateClock(){
   const now = new Date();
+  const day = String(now.getDate()).padStart(2, '0');
+  const month = String(now.getMonth() + 1).padStart(2, '0');
+  const year = now.getFullYear();
   const hours = String(now.getHours()).padStart(2, '0');
   const minutes = String(now.getMinutes()).padStart(2, '0');
   const seconds = String(now.getSeconds()).padStart(2, '0');
-  document.getElementById("clock").textContent = `⏱️ ${hours}:${minutes}:${seconds}`;
+  document.getElementById("clock").textContent = `📅 ${day}.${month}.${year} | ⏱️ ${hours}:${minutes}:${seconds}`;
 }
 setInterval(updateClock, 1000);
 updateClock();
@@ -333,6 +342,19 @@ function login(){
   }
 
   err.textContent = "❌ Falsches Passwort!";
+}
+
+// HINTERGRUND FARBE ÄNDERN (UND SPEICHERN)
+function changeBg(bgStyle){
+  document.body.style.background = bgStyle;
+  localStorage.setItem("hysen_bg_style", bgStyle);
+}
+
+function loadSavedBg(){
+  const savedBg = localStorage.getItem("hysen_bg_style");
+  if(savedBg) {
+    document.body.style.background = savedBg;
+  }
 }
 
 function addCustomCard(){
@@ -424,6 +446,7 @@ function searchGames(){
 
 function escapeHtml(v){ return String(v).replace(/[&<>"']/g, m => ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;" }[m])); }
 
+loadSavedBg();
 loadSavedCards();
 </script>
 </body>
