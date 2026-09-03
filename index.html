@@ -6,7 +6,7 @@
 <title>Hysen Hub Pro</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Segoe UI',Arial,sans-serif;min-height:100vh;color:#ffffff;background:linear-gradient(135deg,#38ef7d,#11998e);overflow-x:hidden;transition:background 0.5s ease}
+body{font-family:'Segoe UI',Arial,sans-serif;min-height:100vh;color:#ffffff;background:linear-gradient(135deg,#38ef7d,#11998e);background-size:cover;background-position:center;background-attachment:fixed;overflow-x:hidden;transition:background 0.5s ease}
 
 header{height:76px;background:rgba(255,255,255,0.2);border-bottom:1px solid rgba(255,255,255,0.3);display:flex;align-items:center;justify-content:space-between;padding:0 28px;position:sticky;top:0;z-index:100;backdrop-filter:blur(20px)}
 .logo{font-size:26px;font-weight:800;letter-spacing:-0.5px;color:#ffffff;text-shadow:0 2px 8px rgba(0,0,0,0.2)}.logo span{color:#facc15;text-shadow:0 0 15px rgba(250,204,21,0.6)}
@@ -26,13 +26,20 @@ header{height:76px;background:rgba(255,255,255,0.2);border-bottom:1px solid rgba
 .weather-temp{font-size:24px;font-weight:bold;color:#facc15;text-shadow:0 1px 3px rgba(0,0,0,0.3)}
 .weather-city{font-size:14px;color:#ffffff;font-weight:bold}
 
-.search{width:min(650px,100%);padding:16px 22px;margin:24px auto;display:block;border-radius:16px;border:1px solid rgba(255,255,255,0.4);background:rgba(255,255,255,0.25);color:white;outline:0;font-size:16px;backdrop-filter:blur(12px);transition:all 0.3s}
+.search{width:min(650px,100%);padding:16px 22px;margin:24px auto 16px auto;display:block;border-radius:16px;border:1px solid rgba(255,255,255,0.4);background:rgba(255,255,255,0.25);color:white;outline:0;font-size:16px;backdrop-filter:blur(12px);transition:all 0.3s}
 .search::placeholder{color:#f1f5f9}
 .search:focus{border-color:#ffffff;box-shadow:0 0 20px rgba(255,255,255,0.5);background:rgba(255,255,255,0.35)}
 
+/* KATEGORIEN FILTER BUTTONS */
+.filter-container{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-bottom:25px}
+.filter-btn{background:rgba(0,0,0,0.25);border:1px solid rgba(255,255,255,0.3);color:white;padding:8px 16px;border-radius:20px;font-weight:bold;font-size:13px;cursor:pointer;transition:all 0.3s ease;backdrop-filter:blur(8px)}
+.filter-btn:hover,.filter-btn.active{background:rgba(255,255,255,0.35);border-color:#ffffff;transform:scale(1.05);box-shadow:0 0 12px rgba(255,255,255,0.4)}
+
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:20px}
-.card{position:relative;background:rgba(255,255,255,0.2);border:1px solid rgba(255,255,255,0.35);border-radius:20px;padding:24px;transition:all 0.3s ease;box-shadow:0 10px 30px rgba(0,0,0,0.12);backdrop-filter:blur(12px);display:flex;flex-direction:column;justify-content:space-between}
-.card:hover{transform:translateY(-7px);border-color:#ffffff;box-shadow:0 15px 35px rgba(255,255,255,0.4)}
+
+/* CARD MIT STARKEM GLOW EFFEKT */
+.card{position:relative;background:rgba(255,255,255,0.2);border:1px solid rgba(255,255,255,0.35);border-radius:20px;padding:24px;transition:all 0.35s cubic-bezier(0.4, 0, 0.2, 1);box-shadow:0 10px 30px rgba(0,0,0,0.12);backdrop-filter:blur(12px);display:flex;flex-direction:column;justify-content:space-between}
+.card:hover{transform:translateY(-8px) scale(1.02);border-color:#ffffff;box-shadow:0 0 25px rgba(255,255,255,0.8),0 0 50px rgba(139,92,246,0.5)}
 .card-badge{position:absolute;top:15px;right:15px;font-size:10px;font-weight:bold;padding:4px 8px;border-radius:20px;background:rgba(0,0,0,0.25);color:#ffffff;border:1px solid rgba(255,255,255,0.4);text-transform:uppercase}
 .fav-btn{position:absolute;top:12px;left:15px;background:none;border:none;font-size:18px;cursor:pointer;opacity:0.7;transition:0.2s}
 .fav-btn.active,.fav-btn:hover{opacity:1;transform:scale(1.2)}
@@ -68,6 +75,9 @@ body.is-admin .delete-btn{display:block}
 .theme-btn{width:42px;height:42px;border-radius:50%;border:2px solid #ffffff;cursor:pointer;transition:transform 0.2s;box-shadow:0 4px 10px rgba(0,0,0,0.2)}
 .theme-btn:hover{transform:scale(1.25)}
 
+/* CUSTOM WALLPAPER INPUT */
+.wallpaper-box{display:flex;gap:10px;margin-top:15px}
+
 .modal{position:fixed;inset:0;background:rgba(0,0,0,0.6);backdrop-filter:blur(8px);display:none;align-items:center;justify-content:center;z-index:200}
 .modalBox{width:min(420px,90%);background:rgba(30,41,59,0.95);border:1px solid rgba(255,255,255,0.3);border-radius:24px;padding:32px;box-shadow:0 25px 80px rgba(0,0,0,0.5)}
 .modalBox h2{margin-bottom:8px;color:white}
@@ -95,6 +105,7 @@ body.is-admin .delete-btn{display:block}
     <h1>Willkommen bei Hysen Hub</h1>
     <p>Deine zentralen Apps und Spiele an einem Ort.</p>
 
+    <!-- WETTER WIDGET VIERNHEIM -->
     <div class="weather-widget">
       <div class="weather-info">
         <div class="weather-icon" id="w-icon">🌤️</div>
@@ -107,11 +118,23 @@ body.is-admin .delete-btn{display:block}
     </div>
 
     <input id="appSearch" class="search" placeholder="🔎 Apps oder Spiele suchen..." oninput="searchApps()">
+
+    <!-- KATEGORIEN FILTER -->
+    <div class="filter-container">
+      <button class="filter-btn active" onclick="filterCategory('alle', this)">✨ Alle</button>
+      <button class="filter-btn" onclick="filterCategory('Schule', this)">🏫 Schule</button>
+      <button class="filter-btn" onclick="filterCategory('KI', this)">🤖 KI</button>
+      <button class="filter-btn" onclick="filterCategory('Lernen', this)">🎓 Lernen</button>
+      <button class="filter-btn" onclick="filterCategory('Kommunikation', this)">💬 Kommunikation</button>
+      <button class="filter-btn" onclick="filterCategory('Musik', this)">🎵 Musik</button>
+      <button class="filter-btn" onclick="filterCategory('Arbeit', this)">💼 Arbeit</button>
+      <button class="filter-btn" onclick="filterCategory('Suche', this)">🌐 Suche</button>
+    </div>
   </section>
 
   <h2 style="margin-bottom:15px; font-size:22px; color: white;">📱 Hub Apps</h2>
   <div class="grid" id="apps">
-    <div class="card">
+    <div class="card" data-cat="Schule">
       <button class="fav-btn" onclick="toggleFav(this)">⭐</button>
       <span class="card-badge">Schule</span>
       <div class="icon">📅</div>
@@ -123,7 +146,7 @@ body.is-admin .delete-btn{display:block}
       </div>
       <button onclick="openSite('https://www.dsbmobile.de/Login.aspx')">Öffnen</button>
     </div>
-    <div class="card">
+    <div class="card" data-cat="Kommunikation">
       <button class="fav-btn" onclick="toggleFav(this)">⭐</button>
       <span class="card-badge">Kommunikation</span>
       <div class="icon">👥</div>
@@ -131,7 +154,7 @@ body.is-admin .delete-btn{display:block}
       <p>Chatten, Anrufe & Videokonferenzen</p>
       <button onclick="openSite('https://www.microsoft.com/de-de/microsoft-teams/log-in?market=de')">Öffnen</button>
     </div>
-    <div class="card">
+    <div class="card" data-cat="Musik">
       <button class="fav-btn" onclick="toggleFav(this)">⭐</button>
       <span class="card-badge">Musik</span>
       <div class="icon">🎹</div>
@@ -139,7 +162,7 @@ body.is-admin .delete-btn{display:block}
       <p>Interaktives Online-Klavier spielen</p>
       <button onclick="openSite('https://www.onlinepianist.com/virtual-piano/de')">Öffnen</button>
     </div>
-    <div class="card">
+    <div class="card" data-cat="KI">
       <button class="fav-btn" onclick="toggleFav(this)">⭐</button>
       <span class="card-badge">KI</span>
       <div class="icon">♊</div>
@@ -147,7 +170,7 @@ body.is-admin .delete-btn{display:block}
       <p>Intelligente KI für Fragen und Ideen</p>
       <button onclick="openSite('https://gemini.google.com')">Öffnen</button>
     </div>
-    <div class="card">
+    <div class="card" data-cat="Lernen">
       <button class="fav-btn" onclick="toggleFav(this)">⭐</button>
       <span class="card-badge">Lernen</span>
       <div class="icon">🟣</div>
@@ -155,7 +178,7 @@ body.is-admin .delete-btn{display:block}
       <p>Lerne mit interaktiven Quiz-Spielen</p>
       <button onclick="openSite('https://kahoot.it')">Öffnen</button>
     </div>
-    <div class="card">
+    <div class="card" data-cat="Lernen">
       <button class="fav-btn" onclick="toggleFav(this)">⭐</button>
       <span class="card-badge">Lernen</span>
       <div class="icon">🎓</div>
@@ -163,7 +186,7 @@ body.is-admin .delete-btn{display:block}
       <p>Erklärvideos & Lerninhalte einfach erklärt</p>
       <button onclick="openSite('https://studyflix.de')">Öffnen</button>
     </div>
-    <div class="card">
+    <div class="card" data-cat="Arbeit">
       <button class="fav-btn" onclick="toggleFav(this)">⭐</button>
       <span class="card-badge">Arbeit</span>
       <div class="icon">💼</div>
@@ -171,7 +194,7 @@ body.is-admin .delete-btn{display:block}
       <p>Word, Excel und PowerPoint</p>
       <button onclick="openSite('https://www.microsoft365.com')">Öffnen</button>
     </div>
-    <div class="card">
+    <div class="card" data-cat="KI">
       <button class="fav-btn" onclick="toggleFav(this)">⭐</button>
       <span class="card-badge">KI</span>
       <div class="icon">🤖</div>
@@ -179,7 +202,7 @@ body.is-admin .delete-btn{display:block}
       <p>Intelligenter KI-Assistent</p>
       <button onclick="openSite('https://chatgpt.com')">Öffnen</button>
     </div>
-    <div class="card">
+    <div class="card" data-cat="Suche">
       <button class="fav-btn" onclick="toggleFav(this)">⭐</button>
       <span class="card-badge">Suche</span>
       <div class="icon">🌐</div>
@@ -187,7 +210,7 @@ body.is-admin .delete-btn{display:block}
       <p>Schnelle Web-Suche</p>
       <button onclick="openSite('https://www.google.com')">Öffnen</button>
     </div>
-    <div class="card">
+    <div class="card" data-cat="Schule">
       <button class="fav-btn" onclick="toggleFav(this)">⭐</button>
       <span class="card-badge">Schule</span>
       <div class="icon">🏫</div>
@@ -203,6 +226,7 @@ body.is-admin .delete-btn{display:block}
       <p>Hier kannst du neue Links erstellen, den Hintergrund ändern und auf alle Admin-Inhalte zugreifen.</p>
       <div class="status">● Als Admin angemeldet</div>
 
+      <!-- HINTERGRUND FARB-EINSTELLUNG -->
       <div class="manager">
         <h3>🎨 Hintergrund-Design ändern</h3>
         <p>Wähle aus 15 hellen, knalligen und bunten Farb-Styles:</p>
@@ -212,21 +236,27 @@ body.is-admin .delete-btn{display:block}
           <button class="theme-btn" style="background: linear-gradient(135deg, #ffdee9, #b5fffc);" onclick="changeBg('linear-gradient(135deg, #ffdee9, #b5fffc)')" title="Pastel Dream"></button>
           <button class="theme-btn" style="background: linear-gradient(135deg, #e0c3fc, #8ec5fc);" onclick="changeBg('linear-gradient(135deg, #e0c3fc, #8ec5fc)')" title="Lavender Sky"></button>
           <button class="theme-btn" style="background: linear-gradient(135deg, #fbfcdb, #daae51);" onclick="changeBg('linear-gradient(135deg, #fbfcdb, #daae51)')" title="Golden Sun"></button>
-          
           <button class="theme-btn" style="background: linear-gradient(135deg, #38ef7d, #11998e);" onclick="changeBg('linear-gradient(135deg, #38ef7d, #11998e)')" title="Emerald Light"></button>
           <button class="theme-btn" style="background: linear-gradient(135deg, #ff0844, #ffb199);" onclick="changeBg('linear-gradient(135deg, #ff0844, #ffb199)')" title="Neon Red Coral"></button>
           <button class="theme-btn" style="background: linear-gradient(135deg, #f12711, #f5af19);" onclick="changeBg('linear-gradient(135deg, #f12711, #f5af19)')" title="Fire Glow"></button>
           <button class="theme-btn" style="background: linear-gradient(135deg, #2193b0, #6dd5ed);" onclick="changeBg('linear-gradient(135deg, #2193b0, #6dd5ed)')" title="Bright Sky Blue"></button>
           <button class="theme-btn" style="background: linear-gradient(135deg, #b92b27, #1565c0);" onclick="changeBg('linear-gradient(135deg, #b92b27, #1565c0)')" title="Red Blue Hybrid"></button>
-
           <button class="theme-btn" style="background: linear-gradient(135deg, #00c6ff, #0072ff);" onclick="changeBg('linear-gradient(135deg, #00c6ff, #0072ff)')" title="Ocean Neon"></button>
           <button class="theme-btn" style="background: linear-gradient(135deg, #f7797d, #FBD786, #C6FFDD);" onclick="changeBg('linear-gradient(135deg, #f7797d, #FBD786, #C6FFDD)')" title="Tri-Color Rainbow"></button>
           <button class="theme-btn" style="background: linear-gradient(135deg, #8a2387, #e94057, #f27121);" onclick="changeBg('linear-gradient(135deg, #8a2387, #e94057, #f27121)')" title="Sunset Glow"></button>
           <button class="theme-btn" style="background: linear-gradient(135deg, #4776e6, #8e54e9);" onclick="changeBg('linear-gradient(135deg, #4776e6, #8e54e9)')" title="Royal Violet"></button>
           <button class="theme-btn" style="background: linear-gradient(135deg, #1e2640, #3a4870);" onclick="changeBg('linear-gradient(135deg, #1e2640, #3a4870)')" title="Classic Blue"></button>
         </div>
+
+        <!-- CUSTOM BACKGROUND WALLPAPER -->
+        <h4 style="margin-top:20px; color:#ffffff;">🖼️ Eigenes Hintergrundbild (URL):</h4>
+        <div class="wallpaper-box">
+          <input id="customBgUrl" placeholder="Bild-URL einfügen (z. B. https://example.com/bild.jpg)">
+          <button class="primary" style="width: auto; white-space: nowrap;" onclick="setCustomWallpaper()">Bild festlegen</button>
+        </div>
       </div>
 
+      <!-- LINK / CARD CREATOR -->
       <div class="manager">
         <h3>🔗 Eigenen Link / Karte erstellen</h3>
         <p>Erstelle ein neues Spiel oder eine neue App. Der Link wird dauerhaft im Browser gespeichert!</p>
@@ -254,21 +284,22 @@ body.is-admin .delete-btn{display:block}
     <input id="gameSearch" class="search" placeholder="🔎 Spiele & Admin-Links suchen..." oninput="searchGames()">
     
     <div class="grid" id="games">
-      <div class="card"><span class="card-badge">Medien</span><div class="icon">▶️</div><h3>YouTube</h3><p>Videos, Tutorials und Shorts</p><button onclick="openSite('https://www.youtube.com')">Öffnen</button></div>
-      <div class="card"><span class="card-badge">Lernen</span><div class="icon">🟡</div><h3>Anton App</h3><p>Kostenlose Lern-App für die Schule</p><button onclick="openSite('https://anton.app')">Öffnen</button></div>
-      <div class="card"><span class="card-badge">Social</span><div class="icon">🎵</div><h3>TikTok</h3><p>Videos und Trends ansehen</p><button onclick="openSite('https://www.tiktok.com')">Öffnen</button></div>
-      <div class="card"><span class="card-badge">Store</span><div class="icon">🛍️</div><h3>Chrome Web Store</h3><p>Erweiterungen & Themes finden</p><button onclick="openSite('https://chromewebstore.google.com')">Öffnen</button></div>
-      <div class="card"><span class="card-badge">Kino</span><div class="icon">🍿</div><h3>Kinopolis</h3><p>Filme & Kinoprogramm ansehen</p><button onclick="openSite('https://www.kinopolis.de')">Öffnen</button></div>
-      <div class="card"><span class="card-badge">Gaming</span><div class="icon">🎮</div><h3>Poki</h3><p>Hunderte kostenlose Online-Spiele</p><button onclick="openSite('https://poki.com/de')">Spielen</button></div>
-      <div class="card"><span class="card-badge">Fun / Web</span><div class="icon">🎈</div><h3>neal.fun</h3><p>Interaktive & lustige Minispiele</p><button onclick="openSite('https://neal.fun')">Spielen</button></div>
-      <div class="card"><span class="card-badge">Gaming</span><div class="icon">🕹️</div><h3>CrazyGames</h3><p>Viele Browsergames</p><button onclick="openSite('https://www.crazygames.com')">Spielen</button></div>
-      <div class="card"><span class="card-badge">Gaming</span><div class="icon">🚇</div><h3>Subway Surfers</h3><p>Runner Game im Browser</p><button onclick="openSite('https://ss.randomkzn.com')">Spielen</button></div>
-      <div class="card"><span class="card-badge">Gaming</span><div class="icon">🧱</div><h3>Roblox</h3><p>Roblox Web Platform</p><button onclick="openSite('https://www.roblox.com')">Spielen</button></div>
-      <div class="card"><span class="card-badge">Karten</span><div class="icon">🃏</div><h3>Solitaire</h3><p>Kartenklassiker</p><button onclick="openSite('https://www.solitr.com')">Spielen</button></div>
+      <div class="card" data-cat="Medien"><span class="card-badge">Medien</span><div class="icon">▶️</div><h3>YouTube</h3><p>Videos, Tutorials und Shorts</p><button onclick="openSite('https://www.youtube.com')">Öffnen</button></div>
+      <div class="card" data-cat="Lernen"><span class="card-badge">Lernen</span><div class="icon">🟡</div><h3>Anton App</h3><p>Kostenlose Lern-App für die Schule</p><button onclick="openSite('https://anton.app')">Öffnen</button></div>
+      <div class="card" data-cat="Social"><span class="card-badge">Social</span><div class="icon">🎵</div><h3>TikTok</h3><p>Videos und Trends ansehen</p><button onclick="openSite('https://www.tiktok.com')">Öffnen</button></div>
+      <div class="card" data-cat="Store"><span class="card-badge">Store</span><div class="icon">🛍️</div><h3>Chrome Web Store</h3><p>Erweiterungen & Themes finden</p><button onclick="openSite('https://chromewebstore.google.com')">Öffnen</button></div>
+      <div class="card" data-cat="Kino"><span class="card-badge">Kino</span><div class="icon">🍿</div><h3>Kinopolis</h3><p>Filme & Kinoprogramm ansehen</p><button onclick="openSite('https://www.kinopolis.de')">Öffnen</button></div>
+      <div class="card" data-cat="Gaming"><span class="card-badge">Gaming</span><div class="icon">🎮</div><h3>Poki</h3><p>Hunderte kostenlose Online-Spiele</p><button onclick="openSite('https://poki.com/de')">Spielen</button></div>
+      <div class="card" data-cat="Fun / Web"><span class="card-badge">Fun / Web</span><div class="icon">🎈</div><h3>neal.fun</h3><p>Interaktive & lustige Minispiele</p><button onclick="openSite('https://neal.fun')">Spielen</button></div>
+      <div class="card" data-cat="Gaming"><span class="card-badge">Gaming</span><div class="icon">🕹️</div><h3>CrazyGames</h3><p>Viele Browsergames</p><button onclick="openSite('https://www.crazygames.com')">Spielen</button></div>
+      <div class="card" data-cat="Gaming"><span class="card-badge">Gaming</span><div class="icon">🚇</div><h3>Subway Surfers</h3><p>Runner Game im Browser</p><button onclick="openSite('https://ss.randomkzn.com')">Spielen</button></div>
+      <div class="card" data-cat="Gaming"><span class="card-badge">Gaming</span><div class="icon">🧱</div><h3>Roblox</h3><p>Roblox Web Platform</p><button onclick="openSite('https://www.roblox.com')">Spielen</button></div>
+      <div class="card" data-cat="Karten"><span class="card-badge">Karten</span><div class="icon">🃏</div><h3>Solitaire</h3><p>Kartenklassiker</p><button onclick="openSite('https://www.solitr.com')">Spielen</button></div>
     </div>
   </section>
 </div>
 
+<!-- LOGIN MODAL -->
 <div class="modal" id="loginModal">
   <div class="modalBox">
     <h2>🔐 Admin Login</h2>
@@ -352,17 +383,44 @@ function login(){
   err.textContent = "❌ Falsches Passwort!";
 }
 
-// HINTERGRUND FARBE ÄNDERN (UND SPEICHERN)
+// HINTERGRUND FARBE / WALLPAPER ÄNDERN (UND SPEICHERN)
 function changeBg(bgStyle){
   document.body.style.background = bgStyle;
+  document.body.style.backgroundSize = "cover";
+  document.body.style.backgroundPosition = "center";
+  document.body.style.backgroundAttachment = "fixed";
   localStorage.setItem("hysen_bg_style", bgStyle);
+}
+
+function setCustomWallpaper(){
+  const url = document.getElementById("customBgUrl").value.trim();
+  if(!url){ alert("Bitte eine Bild-URL eingeben!"); return; }
+  const bgStyle = `url('${url}')`;
+  changeBg(bgStyle);
+  alert("✅ Hintergrundeinstellung gespeichert!");
 }
 
 function loadSavedBg(){
   const savedBg = localStorage.getItem("hysen_bg_style");
   if(savedBg) {
-    document.body.style.background = savedBg;
+    changeBg(savedBg);
   }
+}
+
+// KATEGORIEN FILTER
+function filterCategory(cat, btnElem){
+  document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
+  if(btnElem) btnElem.classList.add("active");
+
+  const cards = document.querySelectorAll("#apps .card");
+  cards.forEach(card => {
+    const cardCat = card.getAttribute("data-cat");
+    if(cat === 'alle' || cardCat === cat){
+      card.style.display = "";
+    } else {
+      card.style.display = "none";
+    }
+  });
 }
 
 function addCustomCard(){
@@ -398,6 +456,7 @@ function renderCard(card){
   const cardDiv = document.createElement("div");
   cardDiv.className = "card";
   cardDiv.id = card.id;
+  cardDiv.setAttribute("data-cat", card.category);
 
   cardDiv.innerHTML = `
     ${card.section === 'apps' ? '<button class="fav-btn" onclick="toggleFav(this)">⭐</button>' : ''}
