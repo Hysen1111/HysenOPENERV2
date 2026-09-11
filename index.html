@@ -283,7 +283,7 @@ body.is-admin .delete-btn{display:block}
 </div>
 
 <script>
-const validPasswords = ["hysen", "vedat", "eslem", "tajus", "melvin"];
+const validPasswords = ["hysen", "vedat", "eslem", "tajus", "melvin", "david", "eymen"];
 
 // LIVE UHRZEIT UND DATUM
 function updateClock(){
@@ -453,30 +453,6 @@ function searchGames(){
 }
 
 function escapeHtml(v){ return String(v).replace(/[&<>"']/g, m => ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;" }[m])); }
-
-// LEHRER-MODUS (3x SHIFT DETEKTOR)
-let shiftCount = 0;
-let shiftTimer = null;
-
-document.addEventListener('keydown', (event) => {
-  if (event.key === 'Shift') {
-    shiftCount++;
-    clearTimeout(shiftTimer);
-
-    if (shiftCount === 3) {
-      // Adminbereich sofort ausloggen
-      logout();
-      // Auf Google weiterleiten
-      window.location.href = 'https://www.google.com';
-      shiftCount = 0;
-    } else {
-      // Nach 1,5 Sekunden ohne Klick Zähler zurücksetzen
-      shiftTimer = setTimeout(() => {
-        shiftCount = 0;
-      }, 1500);
-    }
-  }
-});
 
 loadSavedBg();
 loadSavedCards();
