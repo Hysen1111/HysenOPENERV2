@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Hysen Hub Pro</title>
+<title>SchoolHub Pro</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'Segoe UI',Arial,sans-serif;min-height:100vh;color:#ffffff;background:linear-gradient(135deg,#38ef7d,#11998e);overflow-x:hidden;transition:background 0.5s ease}
@@ -83,7 +83,7 @@ body.is-admin .delete-btn{display:block}
 <body>
 
 <header>
-  <div class="logo">🚀 Hysen<span>Hub</span></div>
+  <div class="logo">🚀 School<span>Hub</span></div>
   <div class="header-right">
     <div class="live-clock" id="clock">📅 --.--.---- | ⏱️ --:--:--</div>
     <button class="admin-btn" onclick="openLogin()">🔐 Admin Login</button>
@@ -92,7 +92,7 @@ body.is-admin .delete-btn{display:block}
 
 <div class="container">
   <section class="hero">
-    <h1>Willkommen bei Hysen Hub</h1>
+    <h1>Willkommen bei SchoolHub</h1>
     <p>Deine zentralen Apps und Spiele an einem Ort.</p>
 
     <div class="weather-widget">
@@ -283,7 +283,7 @@ body.is-admin .delete-btn{display:block}
 </div>
 
 <script>
-const validPasswords = ["hysen", "vedat", "eslem", "tajus", "melvin", "david", "eymen"];
+const validPasswords = ["school", "vedat", "eslem", "tajus", "melvin", "david", "eymen"];
 
 // LIVE UHRZEIT UND DATUM
 function updateClock(){
@@ -355,11 +355,11 @@ function login(){
 // HINTERGRUND FARBE ÄNDERN (UND SPEICHERN)
 function changeBg(bgStyle){
   document.body.style.background = bgStyle;
-  localStorage.setItem("hysen_bg_style", bgStyle);
+  localStorage.setItem("schoolhub_bg_style", bgStyle);
 }
 
 function loadSavedBg(){
-  const savedBg = localStorage.getItem("hysen_bg_style");
+  const savedBg = localStorage.getItem("schoolhub_bg_style");
   if(savedBg) {
     document.body.style.background = savedBg;
   }
@@ -380,9 +380,9 @@ function addCustomCard(){
 
   const cardObj = { id, title, category, icon, url: formattedUrl, desc, section };
 
-  const savedCards = JSON.parse(localStorage.getItem("hysen_custom_cards") || "[]");
+  const savedCards = JSON.parse(localStorage.getItem("schoolhub_custom_cards") || "[]");
   savedCards.push(cardObj);
-  localStorage.setItem("hysen_custom_cards", JSON.stringify(savedCards));
+  localStorage.setItem("schoolhub_custom_cards", JSON.stringify(savedCards));
 
   renderCard(cardObj);
 
@@ -414,9 +414,9 @@ function renderCard(card){
 
 function deleteCard(id){
   if(confirm("Möchtest du diese Karte wirklich löschen?")){
-    let savedCards = JSON.parse(localStorage.getItem("hysen_custom_cards") || "[]");
+    let savedCards = JSON.parse(localStorage.getItem("schoolhub_custom_cards") || "[]");
     savedCards = savedCards.filter(c => c.id !== id);
-    localStorage.setItem("hysen_custom_cards", JSON.stringify(savedCards));
+    localStorage.setItem("schoolhub_custom_cards", JSON.stringify(savedCards));
     
     const elem = document.getElementById(id);
     if(elem) elem.remove();
@@ -424,7 +424,7 @@ function deleteCard(id){
 }
 
 function loadSavedCards(){
-  const savedCards = JSON.parse(localStorage.getItem("hysen_custom_cards") || "[]");
+  const savedCards = JSON.parse(localStorage.getItem("schoolhub_custom_cards") || "[]");
   savedCards.forEach(renderCard);
 }
 
